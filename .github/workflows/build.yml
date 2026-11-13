@@ -24,6 +24,8 @@ jobs:
           gradle-version: 8.5
       - run: gradle assembleRelease --no-daemon -Pvc=${{ github.run_number }} -Pslug=${{ github.repository }}
         working-directory: ${{ steps.p.outputs.dir }}
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
       - uses: actions/upload-artifact@v4
         with:
           name: app-release
@@ -31,4 +33,3 @@ jobs:
       - run: gh release create v${{ github.run_number }} "${{ steps.p.outputs.dir }}/app/build/outputs/apk/release/app-release.apk" --title "v${{ github.run_number }}" --notes "build ${{ github.run_number }}"
         env:
           GH_TOKEN: ${{ github.token }}
-          
